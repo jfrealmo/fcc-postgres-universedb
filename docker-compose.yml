@@ -1,0 +1,41 @@
+services:
+  # 1. SERVICIO DE BASE DE DATOS (PostgreSQL)
+  db:
+    image: postgres:14-alpine
+    container_name: fcc_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: fcc_user
+      POSTGRES_PASSWORD: strongpassword # <-- ¡Cámbiala por una segura!
+      POSTGRES_DB: course_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. SERVICIO DE ENTORNO DE DESARROLLO (VS Code, Bash, psql)
+  dev_env:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fcc_dev_environment
+    depends_on:
+      - db
+
+    # 🚨 RUTA ORIGINAL RESTAURADA: Se mantiene tu configuración de volumen explícita.
+    volumes:
+      - /c/Users/fredy/Documents/MisEjerciciosFCC:/workspace
+
+    working_dir: /workspace
+
+    # Variables de entorno para que tus scripts Bash se conecten a la BD.
+    environment:
+      DB_HOST: db
+      DB_USER: fcc_user
+      DB_PASSWORD: strongpassword
+      DB_NAME: course_db
+
+    # Mantiene el contenedor en ejecución indefinidamente para que
+    # VS Code y otros servicios puedan conectarse a él.
+    command: sleep infinity
+
+volumes:
+  postgres_data:

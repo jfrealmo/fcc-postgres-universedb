@@ -1,0 +1,25 @@
+{
+    // Nombre para tu entorno de desarrollo, aparecerá en VS Code.
+    "name": "FCC Dev Environment",
+
+    // Apunta a tu archivo docker-compose.
+    "dockerComposeFile": "../docker-compose.yml",
+
+    // El servicio específico dentro de docker-compose al que VS Code debe conectarse.
+    "service": "dev_env",
+
+    // La carpeta que VS Code debe abrir por defecto al conectarse.
+    // ¡Esta es la solución a tu problema!
+    "workspaceFolder": "/workspace",
+
+    // Opcional: Personalizaciones para VS Code dentro del contenedor.
+    "customizations": {
+      "vscode": {
+        // Puedes añadir extensiones que quieras que se instalen automáticamente
+        // dentro del contenedor para tener una mejor experiencia.
+        "extensions": [
+          "ms-azuretools.vscode-docker"
+        ]
+      }
+    }
+}
