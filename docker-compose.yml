@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  # Servicio para la aplicación del Chatbot Educativo
+  chatbot:
+    build: .
+    container_name: edutech-chatbot
+    ports:
+      - "8501:8501"
+    volumes:
+      # Montar el código fuente para desarrollo en vivo
+      - .:/app
+    networks:
+      - ollama-net
+    # El chatbot depende de que el servicio de Ollama esté disponible
+    depends_on:
+      - ollama
+    # Reiniciar automáticamente si falla
+    restart: unless-stopped
+
+  # Servicio para el modelo de lenguaje de Ollama
+  ollama:
+    image: ollama/ollama
+    container_name: ollama-service
+    ports:
+      - "11434:11434"
+    volumes:
+      # Volumen para persistir los modelos descargados de Ollama
+      - ollama_data:/root/.ollama
+    networks:
+      - ollama-net
+    # Reiniciar automáticamente si falla
+    restart: unless-stopped
+
+# Red para la comunicación entre los servicios
+networks:
+  ollama-net:
+    driver: bridge
+
+# Volumen para almacenar los datos de Ollama
+volumes:
+  ollama_data:
